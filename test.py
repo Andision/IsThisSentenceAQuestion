@@ -17,15 +17,14 @@ chineseUnits = "公斤|克|千克|吨|毫克|磅|英镑|盎司|克拉" + \
 chineseNumeral = "十|百|千|万|十万|百万|千万|万万|亿|十亿|百亿|千亿|万亿|兆|十兆|百兆|千兆|万兆"
 chineseAdverbOfDegree = "远|长|重|大|宽|深|久"
 regexList = [
-    ".*(什么|何时|何地|哪|谁|多少|怎么|怎样).*",
-    ".*(对不对|能不能|可不可以|可以不可以|是不是|行不行).*",
+    ".*(什么|何时|何地|哪|谁|多少|怎么|怎样|是否|有无|可否).*",
+    ".*(对不对|能不能|可不可以|可以不可以|是不是|行不行|需不需要|有没有).*",
     "(为什么|怎么|如何).*",
     ".*(吗)",
     ".*(几|多少)("+chineseNumeral+")?(" +
     chineseMeasureWords+'|'+chineseUnits+").*",
     ".*多("+chineseAdverbOfDegree+").*",
 ]
-
 
 def IsThisSentenceAQuestion(sentence: str) -> bool:
     for pattern in regexList:
