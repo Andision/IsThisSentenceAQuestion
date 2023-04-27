@@ -16,15 +16,52 @@ chineseUnits = "公斤|克|千克|吨|毫克|磅|英镑|盎司|克拉" + \
     "摄氏度|华氏度|度"
 chineseNumeral = "十|百|千|万|十万|百万|千万|万万|亿|十亿|百亿|千亿|万亿|兆|十兆|百兆|千兆|万兆"
 chineseAdverbOfDegree = "远|长|重|大|宽|深|久"
+chineseVerbList = [
+    "对",
+    "能",
+    "可以",
+    "是",
+    "行",
+    "有",
+    "需要",
+    "会",
+    "必须",
+    "要",
+    "去",
+    "敢",
+    "打",
+    "干",
+    "玩",
+    "买",
+    "看",
+    "懂",
+    "知道",
+    "问",
+    "愿意",
+    "想",
+    "认识",
+    "告诉",
+    "在",
+    "怕",
+    "玩",
+    "忙",
+    "累",
+    "感兴趣",
+    "放假",
+    "爱",
+
+]
+regexABA = [".*({})不({}).*".format(i[0], i) for i in chineseVerbList]
 regexList = [
     ".*(什么|何时|何地|哪|谁|多少|怎么|怎样|是否|有无|可否).*",
     ".*(对不对|能不能|可不可以|可以不可以|是不是|行不行|需不需要|有没有).*",
     "(为什么|怎么|如何).*",
-    ".*(吗)",
+    ".*(吗|不)",
     ".*(几|多少)("+chineseNumeral+")?(" +
     chineseMeasureWords+'|'+chineseUnits+").*",
     ".*多("+chineseAdverbOfDegree+").*",
-]
+] + regexABA
+
 
 def IsThisSentenceAQuestion(sentence: str) -> bool:
     for pattern in regexList:
@@ -33,7 +70,11 @@ def IsThisSentenceAQuestion(sentence: str) -> bool:
     return False
 
 
-if __name__ == "__main__":
+def SingleTest(sentence: str):
+    print(IsThisSentenceAQuestion(sentence))
+
+
+def MultipleTest():
     countAll = 0
     countSuccess = 0
     with open(TEST_FILE_NAME, encoding='utf-8') as testFile:
@@ -46,7 +87,7 @@ if __name__ == "__main__":
                 sentence = str(testObject["desc"]).strip()
             except:
                 continue
-                
+
             if len(sentence) == 0:
                 continue
             countAll += 1
@@ -60,14 +101,15 @@ if __name__ == "__main__":
             print("All:{}, Success:{}, Acc:{:.2f}".format(
                 countAll, countSuccess, countSuccess/countAll))
 
-            # sentence = testObject["answer"].split("。")[0]
-            # res = IsThisSentenceAQuestion(sentence)
-            # print("qid:{}, type:Answer, result:{}, sentence:{}".format(
-            #     testObject["qid"], res, sentence[0:10]))
-            # if res:
-            #     print("full sentence:{}".format(sentence))
 
-            # testObject = testFile.readline()
+if __name__ == "__main__":
+    SingleTest("你会不会")
 
-    # sentence = "结果如图"
-    # print(IsThisSentenceAQuestion(sentence))
+    # sentence = testObject["answer"].split("。")[0]
+    # res = IsThisSentenceAQuestion(sentence)
+    # print("qid:{}, type:Answer, result:{}, sentence:{}".format(
+    #     testObject["qid"], res, sentence[0:10]))
+    # if res:
+    #     print("full sentence:{}".format(sentence))
+
+    # testObject = testFile.readline()
