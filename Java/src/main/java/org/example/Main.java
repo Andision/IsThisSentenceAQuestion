@@ -2,6 +2,9 @@ package org.example;
 
 //import com.robrua.nlp.bert.Bert;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
@@ -36,7 +39,41 @@ public class Main {
             "摄氏度|华氏度|度";
     private static String chineseNumeral = "十|百|千|万|十万|百万|千万|万万|亿|十亿|百亿|千亿|万亿|兆|十兆|百兆|千兆|万兆";
     private static String chineseAdverbOfDegree = "远|长|重|大|宽|深|久";
-    private static String[] regexList = new String[]{
+    private static String[] chineseVerbList = new String[]{
+            "对",
+            "能",
+            "可以",
+            "是",
+            "行",
+            "有",
+            "需要",
+            "会",
+            "必须",
+            "要",
+            "去",
+            "敢",
+            "打",
+            "干",
+            "玩",
+            "买",
+            "看",
+            "懂",
+            "知道",
+            "问",
+            "愿意",
+            "想",
+            "认识",
+            "告诉",
+            "在",
+            "怕",
+            "玩",
+            "忙",
+            "累",
+            "感兴趣",
+            "放假",
+            "爱"
+    };
+    private static Object[] regexList = new String[]{
             ".*(什么|何时|何地|哪|谁|多少|怎么|怎样|是否|有无|可否).*",
             ".*(对不对|能不能|可不可以|可以不可以|是不是|行不行|需不需要|有没有).*",
             "(为什么|怎么|如何).*",
@@ -46,9 +83,19 @@ public class Main {
             ".*多("+chineseAdverbOfDegree+").*",
     };
 
+    private static void init(){
+        String[] ABARegexList = new String[chineseVerbList.length];
+        for(int i=0;i<chineseVerbList.length;i++){
+            ABARegexList[i]=".*("+chineseVerbList[i].charAt(0)+"不"+chineseVerbList[i]+").*";
+        }
+        List list = new ArrayList(Arrays.asList(regexList));
+        list.addAll(Arrays.asList(ABARegexList));
+        regexList= list.toArray();
+    }
+
     public static boolean isSentenceAQuestion(String sentence) {
         for (int i = 0; i < regexList.length; i++) {
-            String pattern = regexList[i];
+            String pattern = regexList[i].toString();
             if (Pattern.matches(pattern, sentence)) {
                 return true;
             }
@@ -57,7 +104,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        String sentence = "从北京出发，多久能到上海";
+        init();
+        String sentence = "会不会";
         System.out.println(isSentenceAQuestion(sentence) + " " + sentence);
     }
 }
